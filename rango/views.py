@@ -7,7 +7,7 @@ from django.shortcuts import render_to_response
 
 from django.http import HttpResponse
 
-from rango.models import Category
+from rango.models import Category, Page
 
 def index(request):
     # Request the context of the request.
@@ -21,6 +21,29 @@ def index(request):
 # We make use of the shortcut function to make our lives easier.
 # Note that the first parameter is the template we wish to use.
     return render_to_response('rango/index.html', context_dict, context)
+
+def category(request, category_name_url):
+    context = RequestContext(request)
+
+    category_name = category_name_url.replace('_',' ')
+
+    context_dict = {'category_name': category_name}
+
+    try:
+        category = Category.objects.get(name=category_name)
+
+        pages = Page.objects.filter(category=category)
+
+        context_dict[':pages'] = pages
+
+        context_dict[':category'] = category
+
+    except:
+        Category.DoesNotExist:
+            pass
+
+    return render_to_response('rando/category.html', context_dict, context)
+
 
 
 
