@@ -12,6 +12,12 @@ from django.http import HttpResponse
 from rango.models import Category, Page
 from rango.forms import CategoryForm
 
+def decode(url):
+    return url.replace('_', ' ')
+
+def encode(url):
+    return url.replace(' ', '_')
+
 @csrf_protect
 def index(request):
     # Request the context of the request.
