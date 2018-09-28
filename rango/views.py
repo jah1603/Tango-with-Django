@@ -4,12 +4,15 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.template import RequestContext
 from django.shortcuts import render_to_response
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import requires_csrf_token
 
 from django.http import HttpResponse
 
 from rango.models import Category, Page
 from rango.forms import CategoryForm
 
+@csrf_protect
 def index(request):
     # Request the context of the request.
 # The context contains information such as the client's machine details, for example.
@@ -50,8 +53,12 @@ def category(request, category_name_url):
 
     return render_to_response('rango/category.html', context_dict, context)
 
+@csrf_protect
+@requires_csrf_token
 def add_category(request):
     context = RequestContext(request)
+
+
 
     if request.method == 'POST':
         form = CategoryForm(request.POST)
@@ -67,7 +74,7 @@ def add_category(request):
     else:
         form = CategoryForm()
 
-    return render_to_response('rango/add_category.html', {'form': form}, context)
+    return render(request, 'rango/add_category.html', {'form': form})
 
 
 def aboutpage(request):
