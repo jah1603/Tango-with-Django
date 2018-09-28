@@ -118,8 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # Absolute path to the media
-˓→directory
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # Absolute path to the media directory
 
 TIME_ZONE = 'UTC'
 
