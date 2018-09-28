@@ -20,12 +20,18 @@ def index(request):
 # Return a rendered response to send to the client.
 # We make use of the shortcut function to make our lives easier.
 # Note that the first parameter is the template we wish to use.
+
+    for category in category_list:
+        category.url = category.name.replace(' ', '_')
+
     return render_to_response('rango/index.html', context_dict, context)
 
 def category(request, category_name_url):
     context = RequestContext(request)
 
-    category_name = category_name_url.replace('_',' ')
+    print(category_name_url + " URL HERE")
+
+    category_name = category_name_url.replace('_', ' ')
 
     context_dict = {'category_name': category_name}
 
@@ -34,15 +40,14 @@ def category(request, category_name_url):
 
         pages = Page.objects.filter(category=category)
 
-        context_dict[':pages'] = pages
+        context_dict['pages'] = pages
 
-        context_dict[':category'] = category
+        context_dict['category'] = category
 
-    except:
-        Category.DoesNotExist:
+    except Category.DoesNotExist:
             pass
 
-    return render_to_response('rando/category.html', context_dict, context)
+    return render_to_response('rango/category.html', context_dict, context)
 
 
 
