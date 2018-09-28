@@ -58,8 +58,6 @@ def category(request, category_name_url):
 def add_category(request):
     context = RequestContext(request)
 
-
-
     if request.method == 'POST':
         form = CategoryForm(request.POST)
 
@@ -74,8 +72,36 @@ def add_category(request):
     else:
         form = CategoryForm()
 
+# NEED TO USE RENDER (OBSERVE PARAMETER ORDER) TO FIX CSRF TOKEN ISSUE
     return render(request, 'rango/add_category.html', {'form': form})
 
+
+def add_page(request):
+    context = RequestContext(request)
+
+    category_name = decode_url(category_name_url)
+
+    if request_method == 'POST':
+        form = CategoryForm(request.POST)
+
+        if form.is_valid():
+            page = form.save(commit=False)
+
+            cat = Category.objects.get(name=category_name)
+            page.category = cat
+
+            page.views = 0
+            page.save()
+
+            return category(request, category_name_url)
+        else:
+            print form.errors
+    else:
+        form = PageForm()
+
+    return render(request, 'rango/add_page.html',
+        {'category_name_url': category_name_url,
+        'category_name': category_name, 'form': form})
 
 def aboutpage(request):
     return HttpResponse('Rango says: "Here is the about page." <a href="/rango/">Index</a>')
