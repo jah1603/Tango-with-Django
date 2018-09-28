@@ -12,15 +12,31 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
-SETTINGS_DIR = os.path.dirname(__file__)
-PROJECT_PATH = os.path.join(SETTINGS_DIR, os.pardir)
-PROJECT_PATH = os.path.abpath(PROJECT_PATH)
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
+TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
 
 TEMPLATE_DIRS = (
     TEMPLATE_PATH,
 )
+
+TEMPLATES = [
+  {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            TEMPLATE_PATH,
+                ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+    ]
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -62,21 +78,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'tango_with_django_project.urls'
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
 
 WSGI_APPLICATION = 'tango_with_django_project.wsgi.application'
 
