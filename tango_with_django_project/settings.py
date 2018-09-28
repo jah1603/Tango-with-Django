@@ -16,6 +16,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
 
+DATABASE_PATH = os.path.join(BASE_DIR, 'rango.db')
+
 TEMPLATE_DIRS = (
     TEMPLATE_PATH,
 )
