@@ -21,6 +21,7 @@ from django.views.static import *
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
     url(r'^rango/', include('rango.urls')),
+    url(r'^admin/', include(admin.site.urls)),
               ]
 
 if settings.DEBUG:
