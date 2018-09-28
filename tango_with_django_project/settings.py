@@ -117,6 +117,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # Absolute path to the media
+˓→directory
+
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
@@ -124,6 +128,12 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+STATIC_PATH = os.path.join(BASE_DIR, 'static')
+
+STATICFILES_DIRS = (
+    STATIC_PATH,
+    )
 
 
 # Static files (CSS, JavaScript, Images)
