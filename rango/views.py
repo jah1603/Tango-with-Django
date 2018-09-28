@@ -10,12 +10,12 @@ from django.views.decorators.csrf import requires_csrf_token
 from django.http import HttpResponse
 
 from rango.models import Category, Page
-from rango.forms import CategoryForm
+from rango.forms import CategoryForm, PageForm
 
-def decode(url):
+def decode_url(url):
     return url.replace('_', ' ')
 
-def encode(url):
+def encode_url(url):
     return url.replace(' ', '_')
 
 @csrf_protect
@@ -41,7 +41,7 @@ def category(request, category_name_url):
 
     print(category_name_url + " URL HERE")
 
-    category_name = category_name_url.replace('_', ' ')
+    category_name = decode_url(category_name_url)
 
     context_dict = {'category_name': category_name}
 
@@ -53,6 +53,8 @@ def category(request, category_name_url):
         context_dict['pages'] = pages
 
         context_dict['category'] = category
+
+        context_dict['category_name_url'] = category_name_url
 
     except Category.DoesNotExist:
             pass
@@ -82,13 +84,13 @@ def add_category(request):
     return render(request, 'rango/add_category.html', {'form': form})
 
 
-def add_page(request):
+def add_page(request, category_name_url):
     context = RequestContext(request)
 
     category_name = decode_url(category_name_url)
 
-    if request_method == 'POST':
-        form = CategoryForm(request.POST)
+    if request.method == 'POST':
+        form = PageForm(request.POST)
 
         if form.is_valid():
             page = form.save(commit=False)
@@ -96,11 +98,15 @@ def add_page(request):
             cat = Category.objects.get(name=category_name)
             page.category = cat
 
+            print("HERE IT IS " + page.category)
+
             page.views = 0
             page.save()
 
+
             return category(request, category_name_url)
         else:
+            print("I'm being diverted")
             print form.errors
     else:
         form = PageForm()
