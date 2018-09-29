@@ -22,8 +22,8 @@
     {% endif %}
 
 
-  <a href="/rango/category/{{ category_name_url }}/
-add_page/">Add a New Page</a>
+  <a href="{% url 'rango:add_page' category.slug %}
+">Add a New Page</a>
 
   </body>
 </html>

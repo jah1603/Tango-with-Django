@@ -1,62 +1,91 @@
+#!/usr/bin/env python
+from __future__ import print_function
+
 import os
+import sys
+import random
+
+# print(sys.path)
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tango_with_django_project.settings')
+
 import django
 django.setup()
+
 from rango.models import Category, Page
 
 def populate():
-    python_cat = add_cat('Python', 128, 64)
 
-    add_page(cat=python_cat,
-        title="Official Python Tutorial",
-        url="http://docs.python.org/2/tutorial/")
+	python_pages = [{
+		'title': 'Python Homepage',
+		'url': 'https://www.python.org/'
+	},{
+		'title': 'Python 2 Documentation',
+		'url': 'https://docs.python.org/2/'
+	},{
+		'title': 'Python 3 Documentation',
+		'url': 'https://docs.python.org/3/'
+	},{
+		'title': 'Learn Python the Hard Way - Book',
+		'url': 'https://learnpythonthehardway.org/book/'
+	}]
 
-    add_page(cat=python_cat,
-        title="How to Think like a Computer Scientist",
-        url="http://www.greenteapress.com/thinkpython/")
+	django_pages = [{
+		'title': 'Django Homepage',
+		'url': 'https://www.djangoproject.com/'
+	},{
+		'title': 'Django Official Tutorial',
+		'url': 'https://docs.djangoproject.com/en/1.10/intro/tutorial01/'
+	},{
+		'title': 'Tango with Django',
+		'url': 'http://www.tangowithdjango.com/'
+	},{
+		'title': 'Django on Reddit',
+		'url': 'https://www.reddit.com/r/django'
+	}]
 
-    add_page(cat=python_cat,
-        title="Learn Python in 10 Minutes",
-        url="http://www.korokithakis.net/tutorials/python/")
+	other_pages = [{
+		'title': 'Bottle: Python web framework',
+		'url': 'http://bottlepy.org/docs/dev/index.html#'
+	},{
+		'title': 'Flask (A python microframework)',
+		'url': 'http://flask.pocoo.org/'
+	}]
 
-    django_cat = add_cat("Django", 64, 32)
+	categories = {
+		'Python': {'pages': python_pages, 'views': 128, 'likes': 64},
+		'Django': {'pages': django_pages, 'views': 64, 'likes': 32},
+		'Other Framework': {'pages': other_pages, 'views': 32, 'likes': 16}
+	}
 
-    add_page(cat=django_cat,
-        title="Official Django Tutorial",
-        url="https://docs.djangoproject.com/en/1.5/intro/tutorial01/")
+	for cat, cat_data in categories.items():
+		views = cat_data['views']
+		likes = cat_data['likes']
+		c = add_category(cat, views, likes)
+		for page in cat_data['pages']:
+			add_page(c, page['title'], page['url'])
 
-    add_page(cat=django_cat,
-        title="Django Rocks",
-        url="http://www.djangorocks.com/")
-
-    add_page(cat=django_cat,
-        title="How to Tango with Django",
-        url="http://www.tangowithdjango.com/")
-
-    frame_cat = add_cat("Other Frameworks", 32 , 16)
-
-    add_page(cat=frame_cat,
-        title="Bottle",
-        url="http://bottlepy.org/docs/dev/")
-
-    add_page(cat=frame_cat,
-        title="Flask",
-        url="http://flask.pocoo.org")
-
-    for c in Category.objects.all():
-        for p in Page.objects.filter(category=c):
-            print "- {0} - {1}".format(str(c), str(p))
+	for c in Category.objects.all():
+		for p in Page.objects.filter(category=c):
+			print("- {0} - {1}".format(str(c), str(p)))
 
 
-def add_page(cat, title, url, views=0):
-    p = Page.objects.get_or_create(category=cat, title=title, url=url, views=views)[0]
-    return p
+def add_category(category_name, views, likes):
+	c = Category.objects.get_or_create(name=category_name)[0]
+	c.views = views
+	c.likes = likes
+	c.save()
 
-def add_cat(name, views, likes):
-    c = Category.objects.get_or_create(name=name)[0]
-    return c
+	return c
+
+def add_page(category, title, url, views=0):
+	p = Page.objects.get_or_create(category=category, title=title)[0]
+	p.url = url
+	p.views = random.randint(0,1000)
+	p.save()
+
+	return p
 
 
 if __name__ == '__main__':
-    print "Starting Rango population script..."
-    populate()
+	print("Starting Rango population script...")
+	populate()

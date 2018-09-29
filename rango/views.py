@@ -79,6 +79,7 @@ def show_category(request, category_name_url):
 		_context['category'] = None
 		_context['pages'] = None
 
+
 	return render(request, 'rango/category.html', context=_context)
 
 
