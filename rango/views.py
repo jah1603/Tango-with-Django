@@ -13,7 +13,7 @@ from django.contrib.auth import logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 
-from rango.models import Category, Page
+from rango.models import Category, Page, UserProfile
 from rango.forms import CategoryForm, PageForm
 from rango.forms import UserForm, UserProfileForm
 
@@ -30,8 +30,10 @@ def index(request):
     context = RequestContext(request)
 # Construct a dictionary to pass to the template engine as its context.
 # Note the key boldmessage is the same as {{ boldmessage }} in the template!
-    category_list = Category.objects.order_by('-likes')[:5]
+    category_list = Category.objects.order_by('-likes')[:7]
     context_dict = {'categories': category_list}
+    user = UserProfile.objects.filter(user=request.user)[0]
+    context_dict['user'] = user
 # Return a rendered response to send to the client.
 # We make use of the shortcut function to make our lives easier.
 # Note that the first parameter is the template we wish to use.
@@ -53,6 +55,7 @@ def category(request, category_name_url):
     try:
         category = Category.objects.get(name=category_name)
 
+
         pages = Page.objects.filter(category=category)
 
         context_dict['pages'] = pages
@@ -71,9 +74,10 @@ def category(request, category_name_url):
 def add_category(request):
     context = RequestContext(request)
 
+    user = UserProfile.objects.filter(user=request.user)[0]
+
     if request.method == 'POST':
         form = CategoryForm(request.POST)
-
 
         if form.is_valid():
             form.save(commit=True)
@@ -86,7 +90,7 @@ def add_category(request):
         form = CategoryForm()
 
 # NEED TO USE RENDER (OBSERVE PARAMETER ORDER) TO FIX CSRF TOKEN ISSUE
-    return render(request, 'rango/add_category.html', {'form': form})
+    return render(request, 'rango/add_category.html', {'form': form, 'user': user})
 
 
 def add_page(request, category_name_url):
@@ -166,6 +170,8 @@ def user_login(request):
 
         user = authenticate(username=username, password=password)
 
+        context_dict = {'user': user}
+
         print(user.is_authenticated())
 
         if user is not None:
@@ -174,7 +180,7 @@ def user_login(request):
                 login(request, user)
 
                 category_list = Category.objects.order_by('-likes')[:5]
-                context_dict = {'categories': category_list}
+                context_dict['categories'] = category_list
 
                 for category in category_list:
                     category.url = category.name.replace(' ', '_')
@@ -195,7 +201,7 @@ def user_logout(request):
     logout(request)
 
     return HttpResponseRedirect('/rango/')
-    
+
 
 @login_required
 def restricted(request):
