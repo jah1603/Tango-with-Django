@@ -89,6 +89,7 @@ def add_page(request, category_name_url):
 
     category_name = decode_url(category_name_url)
 
+
     if request.method == 'POST':
         form = PageForm(request.POST)
 
@@ -98,7 +99,6 @@ def add_page(request, category_name_url):
             cat = Category.objects.get(name=category_name)
             page.category = cat
 
-            print("HERE IT IS " + page.category)
 
             page.views = 0
             page.save()
