@@ -164,11 +164,20 @@ def user_login(request):
 
         user = authenticate(username=username, password=password)
 
+        print(user.is_authenticated())
+
         if user is not None:
 
             if user.is_active:
                 login(request, user)
-                return HttpResponseRedirect('/rango/')
+
+                category_list = Category.objects.order_by('-likes')[:5]
+                context_dict = {'categories': category_list}
+
+                for category in category_list:
+                    category.url = category.name.replace(' ', '_')
+
+                return render(request, 'rango/index.html', context_dict)
             else:
 
                 return HttpResponse("Your Rango account is disabled.")
