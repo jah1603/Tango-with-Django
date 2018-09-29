@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
+{% extends 'rango/base.html' %}
+{% block title %}{{ category_name }}{% endblock %}
+{% block body_block %}
 
     <h1>{{ category_name }}</h1>
     {% if category %}
@@ -25,5 +21,4 @@
   <a href="{% url 'rango:add_page' category.slug %}
 ">Add a New Page</a>
 
-  </body>
-</html>
+{% endblock %}
