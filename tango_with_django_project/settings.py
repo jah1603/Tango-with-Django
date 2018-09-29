@@ -53,6 +53,10 @@ SECRET_KEY = 'yp(@z9@$-uwdxl1(oe0&im5d(h=kpro8tl&yehr=!!_rzr$flx'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
+# Specifies where to redirect users should they attempt o view restricted content while not logged in. In this case they are redirected to the log-in screen.
+LOGIN_URL = '/rango/login/'
+
 ALLOWED_HOSTS = []
 
 
