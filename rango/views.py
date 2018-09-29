@@ -11,6 +11,7 @@ from django.http import HttpResponse
 
 from rango.models import Category, Page
 from rango.forms import CategoryForm, PageForm
+from rango.forms import UserForm, UserProfileForm
 
 def decode_url(url):
     return url.replace('_', ' ')
@@ -114,6 +115,43 @@ def add_page(request, category_name_url):
     return render(request, 'rango/add_page.html',
         {'category_name_url': category_name_url,
         'category_name': category_name, 'form': form})
+
+
+def register(request):
+    context = RequestContext(request)
+
+    registered = False
+
+    if request.method == 'POST':
+
+        user_form = UserForm(data=request.POST)
+        profile_form = UserProfileForm(data=request.POST)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()
+
+            user.set_password(user.password)
+            user.save()
+
+            profile = profile_form.save(commit=False)
+            profile.user = user
+
+            if 'picture' in request.FILES:
+                profile.picture = request.FILES['picture']
+
+            profile.save()
+
+            registered = True
+
+        else:
+            print user_form.errors, profile_form.errors
+
+    else:
+        user_form = UserForm()
+        profile_form = ProfileForm()
+
+    return render(request, 'rango/register.html', {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+
 
 def aboutpage(request):
     return HttpResponse('Rango says: "Here is the about page." <a href="/rango/">Index</a>')
