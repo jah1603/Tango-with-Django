@@ -59,6 +59,9 @@ LOGIN_URL = '/rango/login/'
 
 ALLOWED_HOSTS = []
 
+# Sets up browser-length session, meaning the session ends upon close of browser
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 
 # Application definition
 
