@@ -95,7 +95,6 @@ def index(request):
 
 	response = render(request, 'rango/index.html', context=_context)
 
-
 	return response
 
 
@@ -106,6 +105,7 @@ def about(request):
 
 
 def register(request):
+
 	registered = False
 
 	if request.method == 'POST':
