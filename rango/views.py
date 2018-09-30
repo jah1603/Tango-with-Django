@@ -15,6 +15,7 @@ from django.contrib.auth import logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from datetime import datetime
 
 from rango.models import Category, Page, UserProfile
 from rango.forms import CategoryForm, PageForm
@@ -94,6 +95,24 @@ def index(request):
 	}
 
 	response = render(request, 'rango/index.html', context=_context)
+
+        visits = int(request.COOKIES.get('visits', '0'))
+
+        if request.COOKIES.has_key('last_visit'):
+# Yes it does! Get the cookie's value.
+            last_visit = request.COOKIES['last_visit']
+# Cast the value to a Python date/time object.
+            last_visit_time = datetime.strptime(last_visit[:-7], "%Y-%m-%d %H:%M:%S")
+# If it's been more than a day since the last visit...
+            if (datetime.now() - last_visit_time).days > 0:
+# ...reassign the value of the cookie to +1 of what it was before...
+                response.set_cookie('visits', visits+1)
+# ...and update the last visit cookie, too.
+                response.set_cookie('last_visit', datetime.now())
+        else:
+# Cookie last_visit doesn't exist, so create it to the current date/time.
+            response.set_cookie('last_visit', datetime.now())
+# Return response back to the user, updating any cookies that need changed.
 
 	return response
 
