@@ -1,6 +1,7 @@
 {% extends 'rango/base.html' %}
 {% block title %}{{ category_name }}{% endblock %}
 {% block body_block %}
+<div class="hero-unit">
 <form id="page_form" method="post" action="{% url 'rango:add_page' category.slug %}">
 
   {% csrf_token %}
@@ -16,5 +17,6 @@
 
 <input type="submit" name="submit" value="Create Page" />
 </form>
+</div>
 
 {% endblock %}
