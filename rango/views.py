@@ -118,8 +118,15 @@ def index(request):
 
 def about(request):
 
-	_context = {"author": "Raghu"}
-	return render(request, 'rango/about.html', context=_context)
+    if request.session.get('visits'):
+        count = request.session.get('visits')
+    else:
+        count = 0
+# remember to include the visit data
+
+    _context = {'visits': count}
+
+    return render(request, 'rango/about.html', _context)
 
 
 def register(request):
