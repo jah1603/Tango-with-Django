@@ -17,8 +17,11 @@
       The specified category {{ category_name }} does not exist!
     {% endif %}
 
+    {% if user.is_authenticated %}
+        <a href="{% url 'rango:add_page' category.slug %}">Add a New Page</a>
+    {% else %}
+      <p>Log in to add a page!</p>
+    {% endif %}
 
-  <a href="{% url 'rango:add_page' category.slug %}
-">Add a New Page</a>
 
 {% endblock %}
