@@ -33,15 +33,16 @@
 {% else %}
 <li><a href="/rango/register/">Register</a></li>
 <li><a href="/rango/login/">Login</a></li>
+<li><a href="/rango/about/">About</a></li>
 {% endif %}
 </ul>
 <ul class="nav">
 {% if user.is_authenticated %}
+<li><a href="/rango/about/">About</a></li>
 <li><a href="/rango/restricted/">Restricted</a></li>
 <li><a href="/rango/add_category/">Add Category</a></li>
 <li><a href="/rango/logout/">Logout</a></li>
 {% endif %}
-<li><a href="/rango/about/">About</a></li>
 </ul>
 </div>
 <!--/.nav-collapse -->
