@@ -99,7 +99,7 @@ def track_url(request):
     page_id = None
     url = '/rango/'
 
-    if request.method = 'GET':
+    if request.method == 'GET':
         if 'page_id' in request.GET:
             page_id = request.GET['page_id']
             try:
