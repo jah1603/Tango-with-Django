@@ -16,6 +16,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from datetime import datetime
+from django.contrib.auth.models import User
 
 from rango.models import Category, Page, UserProfile
 from rango.forms import CategoryForm, PageForm
@@ -98,6 +99,23 @@ def get_category_list():
         cat.url = cat.slug
         return cat_list
 
+
+@login_required
+def profile(request):
+    context = RequestContext(request)
+    cat_list = get_category_list()
+    context_dict = {'cat_list': cat_list}
+    u = User.objects.get(username=request.user)
+
+    try:
+        up = UserProfile.objects.get(user=u)
+    except:
+        up = None
+
+    context_dict['user'] = u
+    context_dict['userprofile'] = up
+
+    return render(request, 'rango/profile.html', context_dict)
 
 def index(request):
 
