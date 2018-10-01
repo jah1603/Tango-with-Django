@@ -122,7 +122,7 @@ def show_category(request, category_name_url):
 	try:
 		category = Category.objects.get(slug=category_name_url)
 
-		pages = Page.objects.filter(category=category)
+		pages = Page.objects.filter(category=category).order_by('-views')
 		_context['category'] = category
 		_context['pages'] = pages
 	except Category.DoesNotExist:
