@@ -36,6 +36,7 @@ def add_page(request, category_slug_url):
 
 	print category
 	form = PageForm()
+        cat_list = get_category_list()
 	if request.method == 'POST':
 		form = PageForm(request.POST)
 		if category:
@@ -49,13 +50,17 @@ def add_page(request, category_slug_url):
 	_context = {
 		'form': form,
 		'category': category,
-		'title' : 'Add a Page'
+		'title' : 'Add a Page',
+        'cat_list': cat_list
 	}
 	return render(request, 'rango/add_page.html', context=_context)
 
 
 def add_category(request):
+        cat_list = get_category_list()
 	form = CategoryForm()
+
+
 
 	if request.method == 'POST':
 		form = CategoryForm(request.POST)
@@ -64,12 +69,15 @@ def add_category(request):
 			return index(request)
 		else:
 			print(form.errors)
+            
 
-	return render(request, 'rango/add_category.html', {'form':form})
+	return render(request, 'rango/add_category.html', {'form':form, 'cat_list': cat_list})
 
 
 def show_category(request, category_name_url):
 	_context = {}
+
+        cat_list = get_category_list()
 
 	try:
 		category = Category.objects.get(slug=category_name_url)
@@ -79,19 +87,28 @@ def show_category(request, category_name_url):
 	except Category.DoesNotExist:
 		_context['category'] = None
 		_context['pages'] = None
+        _context['cat_list'] = cat_list
 
 
 	return render(request, 'rango/category.html', context=_context)
+
+def get_category_list():
+    cat_list = Category.objects.all()
+    for cat in cat_list:
+        cat.url = cat.slug
+        return cat_list
 
 
 def index(request):
 
 	category_list = Category.objects.order_by('-likes')[:5]
 	pages_list = Page.objects.order_by('-views')[:5]
+        cat_list = get_category_list()
 	_context = {
 		'categories': category_list,
 		'most_viewed_pages': pages_list,
-		'title' : 'Welcome to Tango with Django'
+		'title' : 'Welcome to Tango with Django',
+        'cat_list': cat_list
 	}
 
 	response = render(request, 'rango/index.html', context=_context)
@@ -118,13 +135,15 @@ def index(request):
 
 def about(request):
 
+    cat_list = get_category_list()
+
     if request.session.get('visits'):
         count = request.session.get('visits')
     else:
         count = 0
 # remember to include the visit data
 
-    _context = {'visits': count}
+    _context = {'visits': count, 'cat_list': cat_list}
 
     return render(request, 'rango/about.html', _context)
 
@@ -192,4 +211,5 @@ def user_logout(request):
 
 @login_required
 def restricted(request):
-	return render(request, 'rango/restricted.html', {})
+        cat_list = get_category_list()
+	return render(request, 'rango/restricted.html', {'cat_list': cat_list})
