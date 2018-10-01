@@ -15,5 +15,5 @@ urlpatterns = [
 	url(r'user/(?P<username>[\w\-]+)/$', views.show_user, name='show_user'),
     url(r'^profile/$', views.profile, name='profile'),
     url(r'^goto/$', views.track_url, name='track_url'),
-    url(r'^like_category/$', views.like_category, name='like_category'),
+    url(r'^like_user/$', views.like_user, name='like_user'),
     ]

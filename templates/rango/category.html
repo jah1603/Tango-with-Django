@@ -6,14 +6,6 @@
     {% if category %}
     {% if pages %}
 <ul>
-  <div id="like_count">{{category.likes }}
-    <p>
-<b id="like_count">{{ category.likes }}</b> people like this category
-{% if user.is_authenticated %}
-<button id ="likes" data-catid="{{category.id}}" class="btn btn-mini btn-primary" type="button">Like</button>
-{% endif %}
-</p>
-</div>
 {% for page in pages %}
 <li>
 <a href="/rango/goto/?page_id={{page.id}}">{{page.title}}</a>
