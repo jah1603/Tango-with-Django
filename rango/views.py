@@ -29,6 +29,7 @@ class RangoRegistrationView(RegistrationView):
 
 
 def add_page(request, category_slug_url):
+        cat_list = get_category_list()
 	print category_slug_url
 	try:
 		category = Category.objects.filter(slug=category_slug_url)[0]
@@ -37,7 +38,6 @@ def add_page(request, category_slug_url):
 
 	print category
 	form = PageForm()
-        cat_list = get_category_list()
 	if request.method == 'POST':
 		form = PageForm(request.POST)
 		if category:
@@ -75,6 +75,23 @@ def add_category(request):
 	return render(request, 'rango/add_category.html', {'form':form, 'cat_list': cat_list})
 
 
+def show_user(request, username):
+	_context = {}
+
+        cat_list = get_category_list()
+
+	try:
+		user = UserProfile.objects.get(user__username=username)
+		_context['user'] = user
+
+
+	except UserProfile.DoesNotExist:
+		_context['user'] = None
+        _context['cat_list'] = cat_list
+
+
+	return render(request, 'rango/user_profile.html', context=_context)
+
 def show_category(request, category_name_url):
 	_context = {}
 
@@ -82,6 +99,7 @@ def show_category(request, category_name_url):
 
 	try:
 		category = Category.objects.get(slug=category_name_url)
+
 		pages = Page.objects.filter(category=category)
 		_context['category'] = category
 		_context['pages'] = pages
@@ -119,12 +137,12 @@ def profile(request):
 
 def index(request):
 
-	category_list = Category.objects.order_by('-likes')[:5]
+	user_list = UserProfile.objects.order_by('-user')[:5]
 	pages_list = Page.objects.order_by('-views')[:5]
-        print(pages_list)
+        print(user_list[1].user.username)
         cat_list = get_category_list()
 	_context = {
-		'categories': category_list,
+		'users': user_list,
 		'most_viewed_pages': pages_list,
 		'title' : 'Welcome to Tango with Django',
         'cat_list': cat_list
