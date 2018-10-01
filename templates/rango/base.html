@@ -17,7 +17,7 @@
 </head>
   <body>
 
-    <div class="navbar navbar-inverse navbar-fixed-top">
+<div class="navbar navbar-inverse navbar-fixed-top">
 <div class="navbar-inner">
 <div class="container">
 <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -26,8 +26,9 @@
 <span class="icon-bar"></span>
 </button>
 <a class="brand" href="/rango/">Rango</a><br>
+
 <div class="nav-collapse collapse">
-<ul class="nav pull-right">
+<ul class="nav navbar-nav">
 {% if user.is_authenticated %}
 <li class="navbar-text">Welcome, {{ user.username }}!</li>
 {% else %}
@@ -36,7 +37,7 @@
 <li><a href="/rango/about/">About</a></li>
 {% endif %}
 </ul>
-<ul class="nav">
+<ul class="nav navbar-nav">
 {% if user.is_authenticated %}
 <li><a href="/rango/about/">About</a></li>
 <li><a href="/rango/restricted/">Restricted</a></li>

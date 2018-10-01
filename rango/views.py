@@ -69,7 +69,7 @@ def add_category(request):
 			return index(request)
 		else:
 			print(form.errors)
-            
+
 
 	return render(request, 'rango/add_category.html', {'form':form, 'cat_list': cat_list})
 
@@ -118,6 +118,7 @@ def index(request):
         if request.session.get('last_visit'):
 # Yes it does! Get the cookie's value.
             last_visit_time = request.session.get('last_visit')
+            print(last_visit_time)
             visits = request.session.get('visits', 0)
 # If it's been more than a day since the last visit...
             if  (datetime.now() - datetime.strptime(last_visit_time[:-7], "%Y-%m-%d %H:%M:%S")).days > 0:
@@ -139,6 +140,7 @@ def about(request):
 
     if request.session.get('visits'):
         count = request.session.get('visits')
+        print(count)
     else:
         count = 0
 # remember to include the visit data
