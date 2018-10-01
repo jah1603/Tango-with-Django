@@ -121,6 +121,7 @@ def index(request):
 
 	category_list = Category.objects.order_by('-likes')[:5]
 	pages_list = Page.objects.order_by('-views')[:5]
+        print(pages_list)
         cat_list = get_category_list()
 	_context = {
 		'categories': category_list,

@@ -21,11 +21,10 @@
 <!--/span-->
 <div class="span6">
 <h2>Top Five Pages</h2>
-{% if pages %}
+{% if most_viewed_pages %}
 <ul>
-{% for page in pages %}
-<li><a href="{{ page.url}}">{{ page.title }}</a> - {{ page.category }} ({
-{ page.views }} view(s))</li>
+{% for page in most_viewed_pages %}
+<li><a href="{{ page.url}}">{{ page.title }}</a> - {{ page.category }} ({{ page.views }} view(s))</li>
 {% endfor %}
 </ul>
 {% else %}
