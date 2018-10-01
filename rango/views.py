@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.shortcuts import redirect
 from django.shortcuts import render
 from registration.backends.simple.views import RegistrationView
 from django.template import RequestContext
@@ -92,6 +93,27 @@ def show_user(request, username):
 
 	return render(request, 'rango/user_profile.html', context=_context)
 
+
+def track_url(request):
+    context = RequestContext(request)
+    page_id = None
+    url = '/rango/'
+
+    if request.method = 'GET':
+        if 'page_id' in request.GET:
+            page_id = request.GET['page_id']
+            try:
+                page = Page.objects.get(id = page_id)
+                page.views = page.views + 1
+                page.save()
+                url = page.url
+            except:
+                pass
+
+    return redirect(url)
+
+
+
 def show_category(request, category_name_url):
 	_context = {}
 
@@ -112,9 +134,10 @@ def show_category(request, category_name_url):
 	return render(request, 'rango/category.html', context=_context)
 
 def get_category_list():
-    cat_list = Category.objects.all()
+    cat_list = Category.objects.all().order_by('-views')
     for cat in cat_list:
         cat.url = cat.slug
+
         return cat_list
 
 
