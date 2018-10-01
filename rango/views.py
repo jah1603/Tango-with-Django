@@ -94,6 +94,23 @@ def show_user(request, username):
 	return render(request, 'rango/user_profile.html', context=_context)
 
 
+@login_required
+def like_user(request):
+    context = RequestContext(request)
+    user_id = None
+    if request.method == 'GET':
+        user_id = request.GET['user_id']
+    likes = 0
+    if user_id:
+        user = UserProfile.objects.get(id=int(user_id))
+            if user:
+                likes = user.likes + 1
+                user.likes = likes
+                user.save()
+    return HttpResponse(likes)
+
+
+
 def track_url(request):
     context = RequestContext(request)
     page_id = None
