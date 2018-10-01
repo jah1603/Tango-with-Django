@@ -81,13 +81,17 @@ def show_user(request, username):
 
         cat_list = get_category_list()
 
+
+
 	try:
+
 		user = UserProfile.objects.get(user__username=username)
 		_context['user'] = user
 
 
 	except UserProfile.DoesNotExist:
 		_context['user'] = None
+		_context['liker'] = None
         _context['cat_list'] = cat_list
 
 
@@ -103,10 +107,10 @@ def like_user(request):
     likes = 0
     if user_id:
         user = UserProfile.objects.get(id=int(user_id))
-            if user:
-                likes = user.likes + 1
-                user.likes = likes
-                user.save()
+        if user:
+            likes = user.likes + 1
+            user.likes = likes
+            user.save()
     return HttpResponse(likes)
 
 
