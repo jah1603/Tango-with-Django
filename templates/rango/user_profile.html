@@ -9,7 +9,7 @@
 <h2>Introducing... {{ viewed_user.user.username }}<br>
   <br>
 <button id ="likes" data-userid="{{viewed_user.id}}" class="btn btn-mini btn-danger" type="button">Wink</button>
-<span id = "likes-span">to like</span><span id = "greetings-or-span">, or </span> <button id ="greetings" data-userid="{{viewed_user.id}}" class="btn btn-mini btn-primary" type="button">Wave</button> <span id = "greetings-span">to just say hi </span>
+<span id = "likes-span">to like</span><span id = "greetings-or-span">, or </span> <button id ="greetings" data-userid="{{viewed_user.id}}" class="btn btn-mini btn-primary" type="button">Wave</button> <span id = "greetings-span">to say hi </span>
 </h2>
 {% endif %}
 <p>Email: {{ viewed_user.user.email }}</p>
@@ -24,7 +24,7 @@
 {% endif %}
 </div>
 {% if viewed_user.picture %}
-<img src="{{ user.picture.url }}" />
+<img src="{{ viewed_user.picture.url }}" />
 {% endif %}
 </div>
 {% endblock %}
