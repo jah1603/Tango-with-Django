@@ -98,6 +98,9 @@ def add_liked_profile(profile, liker):
 def delete_all_greeted_profiles():
 	ProfileGreetedByActiveUser.objects.all().delete()
 
+def delete_all_liked_profiles():
+	ProfileLikedByActiveUser.objects.all().delete()
+
 if __name__ == '__main__':
 	print("Starting Rango population script...")
 	populate()

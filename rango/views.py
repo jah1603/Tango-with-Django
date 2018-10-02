@@ -89,9 +89,9 @@ def show_user(request, username):
             context['greeted'] = greeted_user
 
         user = UserProfile.objects.get(user__username=username)
-        if len(ProfileLikedByActiveUser.objects.filter(profile=username, greeter__user__username=request.user)) > 0:
-            greeted_user = ProfileGreetedByActiveUser.objects.filter(profile=username, greeter__user__username=request.user)[0]
-            context['greeted'] = greeted_user
+        if len(ProfileLikedByActiveUser.objects.filter(profile=username, liker__user__username=request.user)) > 0:
+            liked_user = ProfileLikedByActiveUser.objects.filter(profile=username, liker__user__username=request.user)[0]
+            context['liked'] = liked_user
         print("HELLO")
         context['viewed_user'] = user
         context['cat_list'] = cat_list
@@ -102,7 +102,7 @@ def show_user(request, username):
 
     except ProfileGreetedByActiveUser.DoesNotExist:
         context['greeted'] = None
-        context['greeted'] = liked_user
+        context['liked'] = liked_user
         context['viewed_user'] = user
         context['cat_list'] = cat_list
     except ProfileLikedByActiveUser.DoesNotExist:
@@ -119,9 +119,9 @@ def like_user(request):
     user_id = None
     if request.method == 'GET':
         user_id = request.GET['user_id']
-    likes = 0
     if user_id:
         user = UserProfile.objects.get(id=int(user_id))
+        likes = user.likes
         if user:
             if len(ProfileLikedByActiveUser.objects.filter(profile=user.user.username, liker__user__username=request.user)) == 0:
                     likes = user.likes + 1
@@ -138,7 +138,7 @@ def greet_user(request):
     user_id = None
     if request.method == 'GET':
         user_id = request.GET['user_id']
-    likes = 0
+    greetings = 0
     if user_id:
         user = UserProfile.objects.get(id=int(user_id))
         if user:
