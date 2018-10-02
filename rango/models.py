@@ -36,7 +36,6 @@ class UserProfile(models.Model):
 	user = models.OneToOneField(User)
 	likes = models.IntegerField(default=0)
 	greetings = models.IntegerField(default=0)
-	liked_profiles = models.
 	website = models.URLField(blank=True)
 	picture = models.ImageField(upload_to='profile_images',blank=True)
 
@@ -45,16 +44,16 @@ class UserProfile(models.Model):
 
 class ProfileLikedByActiveUser(models.Model):
 	profile = models.OneToOneField(UserProfile)
-	liker = models.ForeignKey(UserProfile, related_name='liker')
-	greeter = models.ForeignKey(UserProfile, related_name='greeter')
+	liker = models.ForeignKey(UserProfile, related_name='likedliker')
+	greeter = models.ForeignKey(UserProfile, related_name='likedgreeter')
 
 	def __unicode__(self):
 		return self.profile.user.username
 
 class ProfileGreetedByActiveUser(models.Model):
 	profile = models.OneToOneField(UserProfile)
-	liker = models.ForeignKey(UserProfile, related_name='liker')
-	greeter = models.ForeignKey(UserProfile, related_name='greeter')
+	liker = models.ForeignKey(UserProfile, related_name='greetedliker')
+	greeter = models.ForeignKey(UserProfile, related_name='greetedgreeter')
 
 	def __unicode__(self):
 		return self.profile.user.username
