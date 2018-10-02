@@ -44,16 +44,14 @@ class UserProfile(models.Model):
 
 class ProfileLikedByActiveUser(models.Model):
 	profile = models.OneToOneField(UserProfile)
-	liker = models.ForeignKey(UserProfile, related_name='likedliker')
-	greeter = models.ForeignKey(UserProfile, related_name='likedgreeter')
+	liker = models.ForeignKey(UserProfile, related_name='liker')
 
 	def __unicode__(self):
 		return self.profile.user.username
 
 class ProfileGreetedByActiveUser(models.Model):
 	profile = models.OneToOneField(UserProfile)
-	liker = models.ForeignKey(UserProfile, related_name='greetedliker')
-	greeter = models.ForeignKey(UserProfile, related_name='greetedgreeter')
+	greeter = models.ForeignKey(UserProfile, related_name='greeter')
 
 	def __unicode__(self):
 		return self.profile.user.username

@@ -93,6 +93,8 @@ def show_user(request, username):
         context['cat_list'] = cat_list
     except ProfileGreetedByActiveUser.DoesNotExist:
         context['greeted'] = None
+        context['viewed_user'] = user
+        context['cat_list'] = cat_list
 
 	return render(request, 'rango/user_profile.html', context=context)
 
@@ -110,6 +112,7 @@ def like_user(request):
             likes = user.likes + 1
             user.likes = likes
             user.save()
+            # greeted_profile = new ProfileGreetedByActiveUser(user, )
     return HttpResponse(likes)
 
 @login_required
