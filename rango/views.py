@@ -130,7 +130,7 @@ def like_user(request):
                     liked_profile = ProfileLikedByActiveUser.objects.create(profile=user.user.username, liker= UserProfile.objects.get(user__username=request.user))
                     liked_profile.save()
                     return HttpResponse(likes)
-        return HttpResponse()
+        return HttpResponse(likes)
 
 @login_required
 def greet_user(request):
@@ -138,9 +138,9 @@ def greet_user(request):
     user_id = None
     if request.method == 'GET':
         user_id = request.GET['user_id']
-    greetings = 0
     if user_id:
         user = UserProfile.objects.get(id=int(user_id))
+        greetings = user.greetings
         if user:
             if len(ProfileGreetedByActiveUser.objects.filter(profile=user.user.username, greeter__user__username=request.user)) == 0:
                 greetings = user.greetings + 1
@@ -149,7 +149,7 @@ def greet_user(request):
                 greeted_profile = ProfileGreetedByActiveUser.objects.create(profile=user.user.username, greeter= UserProfile.objects.get(user__username=request.user))
                 greeted_profile.save()
                 return HttpResponse(greetings)
-    return HttpResponse()
+    return HttpResponse(greetings)
 
 
 
