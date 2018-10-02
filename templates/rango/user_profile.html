@@ -9,7 +9,7 @@
 <h2>Introducing... {{ user.user.username }}<br>
   <br>
 <button id ="likes" data-userid="{{user.id}}" class="btn btn-mini btn-danger" type="button">Wink</button>
-<span>to like </span> <button id ="greetings" data-userid="{{user.id}}" class="btn btn-mini btn-primary" type="button">Wave</button> <span>to say hello </span>
+<span id = "likes-span">to like </span> <button id ="greetings" data-userid="{{user.id}}" class="btn btn-mini btn-primary" type="button">Wave</button> <span id = "greetings-span">to say hello </span>
 </h2>
 {% endif %}
 <p>Email: {{ user.user.email }}</p>
