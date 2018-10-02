@@ -9,7 +9,7 @@
 {% else %}
 <h2>User: {{ user.user.username }}
 <button id ="likes" data-userid="{{user.id}}" class="btn btn-mini btn-danger" type="button">Wink</button>
-<span>or</span> <button id ="likes" data-userid="{{user.id}}" class="btn btn-mini btn-primary" type="button">Wave</button>
+<span>or</span> <button id ="greetings" data-userid="{{user.id}}" class="btn btn-mini btn-primary" type="button">Wave</button>
 </h2>
 {% endif %}
 <p>Email: {{ user.user.email }}</p>

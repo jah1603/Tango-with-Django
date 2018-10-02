@@ -113,6 +113,21 @@ def like_user(request):
             user.save()
     return HttpResponse(likes)
 
+@login_required
+def greet_user(request):
+    context = RequestContext(request)
+    user_id = None
+    if request.method == 'GET':
+        user_id = request.GET['user_id']
+    likes = 0
+    if user_id:
+        user = UserProfile.objects.get(id=int(user_id))
+        if user:
+            greetings = user.greetings + 1
+            user.greetings = greetings
+            user.save()
+    return HttpResponse(greetings)
+
 
 
 def track_url(request):
