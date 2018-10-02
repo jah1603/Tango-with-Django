@@ -3,29 +3,27 @@
 {% block body_block %}
 <div class="hero-unit">
 {% if request.user.is_anonymous %}
-<h2>User: {{ user.user.username }}
+<h2>User: {{ viewed_user.user.username }}
 </h2>
 {% else %}
-<h2>Introducing... {{ user.user.username }}<br>
+<h2>Introducing... {{ viewed_user.user.username }}<br>
   <br>
-<button id ="likes" data-userid="{{user.id}}" class="btn btn-mini btn-danger" type="button">Wink</button>
-<span id = "likes-span">to like </span> <button id ="greetings" data-userid="{{user.id}}" class="btn btn-mini btn-primary" type="button">Wave</button> <span id = "greetings-span">to say hello </span>
+<button id ="likes" data-userid="{{viewed_user.id}}" class="btn btn-mini btn-danger" type="button">Wink</button>
+<span id = "likes-span">to like</span><span id = "greetings-or-span">, or </span> <button id ="greetings" data-userid="{{viewed_user.id}}" class="btn btn-mini btn-primary" type="button">Wave</button> <span id = "greetings-span">to just say hi </span>
 </h2>
 {% endif %}
-<p>Email: {{ user.user.email }}</p>
-{% if user %}
-<p>Website: <a href="{{ user.user.website }}">{{ user.user.website }}</a>
+<p>Email: {{ viewed_user.user.email }}</p>
+{% if viewed_user %}
+<p>Website: <a href="{{ user.user.website }}">{{ viewed_user.user.website }}</a>
 </p>
 <div id="like_count">
   <p>
-<b id="like_count">{{ user.likes }}</b> of this site's users are interested
+<b id="like_count">{{ viewed_user.likes }}</b> of this site's users are interested, <b id="greeting_count"> {{ viewed_user.greetings }} </b> said hi
 </p>
-  <p>
-<b id="greet_count">{{ user.greetings }}</b> of this site's users have said hello
-</p>
+
 {% endif %}
 </div>
-{% if user.picture %}
+{% if viewed_user.picture %}
 <img src="{{ user.picture.url }}" />
 {% endif %}
 </div>

@@ -86,11 +86,11 @@ def show_user(request, username):
 	try:
 
 		user = UserProfile.objects.get(user__username=username)
-		_context['user'] = user
+		_context['viewed_user'] = user
 
 
 	except UserProfile.DoesNotExist:
-		_context['user'] = None
+		_context['viewed_user'] = None
 		_context['liker'] = None
         _context['cat_list'] = cat_list
 
