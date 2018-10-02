@@ -35,6 +35,7 @@ class Page(models.Model):
 class UserProfile(models.Model):
 	user = models.OneToOneField(User)
 	likes = models.IntegerField(default=0)
+	greetings = models.IntegerField(default=0)
 	website = models.URLField(blank=True)
 	picture = models.ImageField(upload_to='profile_images',blank=True)
 
