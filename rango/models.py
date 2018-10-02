@@ -43,15 +43,16 @@ class UserProfile(models.Model):
 		return self.user.username
 
 class ProfileLikedByActiveUser(models.Model):
-	profile = models.OneToOneField(UserProfile)
+	profile = models.CharField(max_length=128)
 	liker = models.ForeignKey(UserProfile, related_name='liker')
 
 	def __unicode__(self):
-		return self.profile.user.username
+		return self.profile
 
 class ProfileGreetedByActiveUser(models.Model):
-	profile = models.OneToOneField(UserProfile)
-	greeter = models.ForeignKey(UserProfile, related_name='greeter')
+	profile = models.CharField(max_length=128)
+	greeter = models.ForeignKey(UserProfile, related_name='greeter', default='')
+
 
 	def __unicode__(self):
-		return self.profile.user.username
+		return self.profile

@@ -68,6 +68,8 @@ def populate():
 		for p in Page.objects.filter(category=c):
 			print("- {0} - {1}".format(str(c), str(p)))
 
+	delete_all_greeted_profiles()
+
 
 def add_category(category_name, views, likes):
 	c = Category.objects.get_or_create(name=category_name)[0]
@@ -92,6 +94,9 @@ def add_greeted_profile(profile, greeter):
 def add_liked_profile(profile, liker):
 	liked_profile = ProfileGreetedByActiveUser.get_or_create(profile=profile, liker=liker)
 	liked_profile.save()
+
+def delete_all_greeted_profiles():
+	ProfileGreetedByActiveUser.objects.all().delete()
 
 if __name__ == '__main__':
 	print("Starting Rango population script...")

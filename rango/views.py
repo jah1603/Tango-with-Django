@@ -84,19 +84,33 @@ def show_user(request, username):
 
     try:
         user = UserProfile.objects.get(user__username=username)
-        greeted_user = ProfileGreetedByActiveUser.objects.get(profile__user__username=username, greeter__user__username=request.user)
+        if len(ProfileGreetedByActiveUser.objects.filter(profile=username, greeter__user__username=request.user)) > 0:
+            greeted_user = ProfileGreetedByActiveUser.objects.filter(profile=username, greeter__user__username=request.user)[0]
+            context['greeted'] = greeted_user
+
+        user = UserProfile.objects.get(user__username=username)
+        if len(ProfileLikedByActiveUser.objects.filter(profile=username, greeter__user__username=request.user)) > 0:
+            greeted_user = ProfileGreetedByActiveUser.objects.filter(profile=username, greeter__user__username=request.user)[0]
+            context['greeted'] = greeted_user
+        print("HELLO")
         context['viewed_user'] = user
-        context['greeted'] = greeted_user
+        context['cat_list'] = cat_list
 
     except UserProfile.DoesNotExist:
-	context['viewed_user'] = None
-        context['cat_list'] = cat_list
-    except ProfileGreetedByActiveUser.DoesNotExist:
-        context['greeted'] = None
-        context['viewed_user'] = user
+        context['viewed_user'] = None
         context['cat_list'] = cat_list
 
-	return render(request, 'rango/user_profile.html', context=context)
+    except ProfileGreetedByActiveUser.DoesNotExist:
+        context['greeted'] = None
+        context['greeted'] = liked_user
+        context['viewed_user'] = user
+        context['cat_list'] = cat_list
+    except ProfileLikedByActiveUser.DoesNotExist:
+        context['greeted'] = None
+        context['liked'] = None
+        context['viewed_user'] = user
+        context['cat_list'] = cat_list
+    return render(request, 'rango/user_profile.html', context=context)
 
 
 @login_required
@@ -109,11 +123,14 @@ def like_user(request):
     if user_id:
         user = UserProfile.objects.get(id=int(user_id))
         if user:
-            likes = user.likes + 1
-            user.likes = likes
-            user.save()
-            greeted_profile = new ProfileGreetedByActiveUser(user, UserProfile.objects.get(user__username=request.user))
-    return HttpResponse(likes)
+            if len(ProfileLikedByActiveUser.objects.filter(profile=user.user.username, liker__user__username=request.user)) == 0:
+                    likes = user.likes + 1
+                    user.likes = likes
+                    user.save()
+                    liked_profile = ProfileLikedByActiveUser.objects.create(profile=user.user.username, liker= UserProfile.objects.get(user__username=request.user))
+                    liked_profile.save()
+                    return HttpResponse(likes)
+        return HttpResponse()
 
 @login_required
 def greet_user(request):
@@ -125,11 +142,14 @@ def greet_user(request):
     if user_id:
         user = UserProfile.objects.get(id=int(user_id))
         if user:
-            greetings = user.greetings + 1
-            user.greetings = greetings
-            user.save()
-
-    return HttpResponse(greetings)
+            if len(ProfileGreetedByActiveUser.objects.filter(profile=user.user.username, greeter__user__username=request.user)) == 0:
+                greetings = user.greetings + 1
+                user.greetings = greetings
+                user.save()
+                greeted_profile = ProfileGreetedByActiveUser.objects.create(profile=user.user.username, greeter= UserProfile.objects.get(user__username=request.user))
+                greeted_profile.save()
+                return HttpResponse(greetings)
+    return HttpResponse()
 
 
 
