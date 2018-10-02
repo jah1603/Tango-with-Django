@@ -19,7 +19,7 @@ from django.contrib.auth.models import User
 from datetime import datetime
 from django.contrib.auth.models import User
 
-from rango.models import Category, Page, UserProfile
+from rango.models import Category, Page, UserProfile, ProfileLikedByActiveUser, ProfileGreetedByActiveUser
 from rango.forms import CategoryForm, PageForm
 from rango.forms import UserForm, UserProfileForm
 
@@ -77,25 +77,24 @@ def add_category(request):
 
 
 def show_user(request, username):
-	_context = {}
+    context = RequestContext(request)
+    context = {}
 
-        cat_list = get_category_list()
+    cat_list = get_category_list()
 
+    try:
+        user = UserProfile.objects.get(user__username=username)
+        greeted_user = ProfileGreetedByActiveUser.objects.get(profile__user__username=username, greeter__user__username=request.user)
+        context['viewed_user'] = user
+        context['greeted'] = greeted_user
 
+    except UserProfile.DoesNotExist:
+	context['viewed_user'] = None
+        context['cat_list'] = cat_list
+    except ProfileGreetedByActiveUser.DoesNotExist:
+        context['greeted'] = None
 
-	try:
-
-		user = UserProfile.objects.get(user__username=username)
-		_context['viewed_user'] = user
-
-
-	except UserProfile.DoesNotExist:
-		_context['viewed_user'] = None
-		_context['liker'] = None
-        _context['cat_list'] = cat_list
-
-
-	return render(request, 'rango/user_profile.html', context=_context)
+	return render(request, 'rango/user_profile.html', context=context)
 
 
 @login_required
@@ -126,6 +125,7 @@ def greet_user(request):
             greetings = user.greetings + 1
             user.greetings = greetings
             user.save()
+
     return HttpResponse(greetings)
 
 
