@@ -112,7 +112,7 @@ def like_user(request):
             likes = user.likes + 1
             user.likes = likes
             user.save()
-            # greeted_profile = new ProfileGreetedByActiveUser(user, )
+            greeted_profile = new ProfileGreetedByActiveUser(user, UserProfile.objects.get(user__username=request.user))
     return HttpResponse(likes)
 
 @login_required

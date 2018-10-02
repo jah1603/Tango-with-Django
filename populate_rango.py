@@ -11,7 +11,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tango_with_django_project.setti
 import django
 django.setup()
 
-from rango.models import Category, Page
+from rango.models import Category, Page, ProfileLikedByActiveUser, ProfileGreetedByActiveUser
 
 def populate():
 
@@ -84,6 +84,10 @@ def add_page(category, title, url, views=0):
 	p.save()
 
 	return p
+
+def add_greeted_profile(profile, greeter):
+	greeted_profile = ProfileGreetedByActiveUser.get_or_create(profile=profile, greeter=greeter)
+	greeted_profile.save()
 
 
 if __name__ == '__main__':
