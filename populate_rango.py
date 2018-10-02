@@ -89,6 +89,9 @@ def add_greeted_profile(profile, greeter):
 	greeted_profile = ProfileGreetedByActiveUser.get_or_create(profile=profile, greeter=greeter)
 	greeted_profile.save()
 
+def add_liked_profile(profile, liker):
+	liked_profile = ProfileGreetedByActiveUser.get_or_create(profile=profile, liker=liker)
+	liked_profile.save()
 
 if __name__ == '__main__':
 	print("Starting Rango population script...")
